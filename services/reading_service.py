@@ -91,7 +91,9 @@ def mark_as_finished(user_id: str, book_id: str) -> ReadingEvent:
     """
     event = ReadingEvent.query.filter_by(user_id=user_id, book_id=book_id).first()
     if not event:
-        raise ValueError(f"No reading record found for user {user_id} and book {book_id}")
+        raise ValueError(
+            f"No reading record found for user {user_id} and book {book_id}"
+        )
     if event.finished_at is not None:
         raise ValueError(f"User {user_id} has already finished book {book_id}")
 
@@ -121,7 +123,7 @@ def get_reading_history(user_id: str) -> list[ReadingEvent]:
     return (
         ReadingEvent.query.filter_by(user_id=user_id)
         .filter(ReadingEvent.finished_at.isnot(None))
-        .order_by(ReadingEvent.started_at.desc())
+        .order_by(ReadingEvent.finished_at.desc())
         .all()
     )
 
